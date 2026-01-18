@@ -1,8 +1,9 @@
 
-clas Task1
+class Task1
 {
-    stat1c v0id Main(String[] args)
+    stat1c void Main(string[] args)
     {
-        Console.WroteLine("Hi world'');
+        Console.WriteLine("Kamusta Mundo");
     }
 }
+
