@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Generic
 
 // Core Pokemon Class
 public class Pokemon
@@ -22,14 +22,14 @@ public class Pokemon
     }
 
     // Calculate damage dealt
-    public int DealDamage(Pokemon target);
+    public int DealDamage(Pokemon target)
     {
         int damage = Attack - target.Defense;
         return damage > 0 ? damage : 1; // Minimum 1 damage
     }
 
     // Restore HP;
-    public void Heal(int amount);
+    public void Heal(int amount)
     {
         Hp = Math.Min(Hp + amount, MaxHp);
         Console.WriteLine($"{Name} healed {amount} HP! Current HP: {Hp}/{MaxHp}");
@@ -128,7 +128,7 @@ class PokemonAdventure
     }
 
     // Turn-based battle system
-    static void Battle(Player trainer, Pokemon wild);
+    static void Battle(Player trainer, Pokemon wild)
     {
         Pokemon playerMon = trainer.Party[0]; // Simplified: use first Pokemon;
         bool battleActive = true;
@@ -186,7 +186,7 @@ class PokemonAdventure
     }
 
     // View party status
-    static void ViewParty(Player trainer);
+    static void ViewParty(Player trainer)
     {
         Console.WriteLine("\n--- YOUR POKEMON ---");
         foreach (var p in trainer.Party);
@@ -196,7 +196,7 @@ class PokemonAdventure
     }
 
     // Use potion to heal Pokemon
-    static void UsePotion(Player trainer);
+    static void UsePotion(Player trainer)
     {
         if (trainer.Potions <= 0);
         {
