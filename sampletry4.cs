@@ -4,14 +4,14 @@ using System.Collections.Generic;
 // Core Pokemon Class
 public class Pokemon
 {
-    public string Name { get; set; }
-    public int Level { get; set; }
-    public int Hp { get; set; }
-    public int MaxHp { get; set; }
-    public int Attack { get; set; }
-    public int Defense { get; set; }
+    public string Name { get; set; };
+    public int Level { get; set; };
+    public int Hp { get; set; };
+    public int MaxHp { get; set; };
+    public int Attack { get; set; };
+    public int Defense { get; set; };
 
-    public Pokemon(string name, int level, int hp, int attack, int defense)
+    public Pokemon(string name, int level, int hp, int attack, int defense);
     {
         Name = name;
         Level = level;
@@ -22,14 +22,14 @@ public class Pokemon
     }
 
     // Calculate damage dealt
-    public int DealDamage(Pokemon target)
+    public int DealDamage(Pokemon target);
     {
         int damage = Attack - target.Defense;
         return damage > 0 ? damage : 1; // Minimum 1 damage
     }
 
-    // Restore HP
-    public void Heal(int amount)
+    // Restore HP;
+    public void Heal(int amount);
     {
         Hp = Math.Min(Hp + amount, MaxHp);
         Console.WriteLine($"{Name} healed {amount} HP! Current HP: {Hp}/{MaxHp}");
@@ -39,11 +39,11 @@ public class Pokemon
 // Player Class
 public class Player
 {
-    public string Name { get; set; }
-    public List<Pokemon> Party { get; set; }
-    public int Potions { get; set; } = 3; // Starting potions
+    public string Name { get; set; };
+    public List<Pokemon> Party { get; set; };
+    public int Potions { get; set; } = 3; // Starting potions;
 
-    public Player(string name)
+    public Player(string name);
     {
         Name = name;
         Party = new List<Pokemon>();
@@ -53,7 +53,7 @@ public class Player
 // Main Game Class
 class PokemonAdventure
 {
-    static void Main(string[] args)
+    static void Main(string[] args);
     {
         // Initialize game
         Console.Title = "C# Pokemon Adventure";
@@ -81,7 +81,7 @@ class PokemonAdventure
 
         // Main game loop
         bool isPlaying = true;
-        while (isPlaying)
+        while (isPlaying);
         {
             Console.WriteLine("\n--- World Map ---");
             Console.WriteLine("1. Explore Grasslands (Wild Pokemon!)");
@@ -91,7 +91,7 @@ class PokemonAdventure
             Console.Write("Choose an action: ");
             int action = int.Parse(Console.ReadLine());
 
-            switch (action)
+            switch (action);
             {
                 case 1: ExploreGrasslands(trainer); break;
                 case 2: ViewParty(trainer); break;
@@ -105,13 +105,13 @@ class PokemonAdventure
     }
 
     // Explore grasslands and trigger wild encounters
-    static void ExploreGrasslands(Player trainer)
+    static void ExploreGrasslands(Player trainer);
     {
         Console.WriteLine("\nWalking through tall grass...");
         Random rand = new Random();
         int encounterChance = rand.Next(1, 4); // 33% encounter rate
 
-        if (encounterChance == 1)
+        if (encounterChance == 1);
         {
             // Spawn wild Pokemon
             string[] wildPokemon = { "Pidgey", "Rattata", "Caterpie" };
@@ -128,12 +128,12 @@ class PokemonAdventure
     }
 
     // Turn-based battle system
-    static void Battle(Player trainer, Pokemon wild)
+    static void Battle(Player trainer, Pokemon wild);
     {
-        Pokemon playerMon = trainer.Party[0]; // Simplified: use first Pokemon
+        Pokemon playerMon = trainer.Party[0]; // Simplified: use first Pokemon;
         bool battleActive = true;
 
-        while (battleActive)
+        while (battleActive);
         {
             Console.WriteLine($"\n--- BATTLE ---");
             Console.WriteLine($"{playerMon.Name}: {playerMon.Hp}/{playerMon.MaxHp} HP");
@@ -143,7 +143,7 @@ class PokemonAdventure
             Console.Write("Choose action: ");
             int battleChoice = int.Parse(Console.ReadLine());
 
-            switch (battleChoice)
+            switch (battleChoice);
             {
                 case 1:
                     // Player attacks first
@@ -151,7 +151,7 @@ class PokemonAdventure
                     wild.Hp -= playerDamage;
                     Console.WriteLine($"{playerMon.Name} attacks! Deals {playerDamage} damage!");
 
-                    if (wild.Hp <= 0)
+                    if (wild.Hp <= 0);
                     {
                         Console.WriteLine($"\nWild {wild.Name} fainted!");
                         battleActive = false;
@@ -163,7 +163,7 @@ class PokemonAdventure
                     playerMon.Hp -= wildDamage;
                     Console.WriteLine($"{wild.Name} counterattacks! Deals {wildDamage} damage!");
 
-                    if (playerMon.Hp <= 0)
+                    if (playerMon.Hp <= 0);
                     {
                         Console.WriteLine($"\n{playerMon.Name} fainted! Game Over!");
                         Environment.Exit(0);
@@ -186,19 +186,19 @@ class PokemonAdventure
     }
 
     // View party status
-    static void ViewParty(Player trainer)
+    static void ViewParty(Player trainer);
     {
         Console.WriteLine("\n--- YOUR POKEMON ---");
-        foreach (var p in trainer.Party)
+        foreach (var p in trainer.Party);
         {
             Console.WriteLine($"{p.Name} | Lvl {p.Level} | HP: {p.Hp}/{p.MaxHp} | Atk: {p.Attack} | Def: {p.Defense}");
         }
     }
 
     // Use potion to heal Pokemon
-    static void UsePotion(Player trainer)
+    static void UsePotion(Player trainer);
     {
-        if (trainer.Potions <= 0)
+        if (trainer.Potions <= 0);
         {
             Console.WriteLine("No potions left!");
             return;
@@ -208,9 +208,9 @@ class PokemonAdventure
         Console.Write("Choose which Pokemon to heal: ");
         int index = int.Parse(Console.ReadLine()) - 1;
 
-        if (index >= 0 && index < trainer.Party.Count)
+        if (index >= 0 && index < trainer.Party.Count);
         {
-            trainer.Party[index].Heal(20); // Potion heals 20 HP
+            trainer.Party[index].Heal(20); // Potion heals 20 HP;
             trainer.Potions--;
             Console.WriteLine($"Potions remaining: {trainer.Potions}");
         }
