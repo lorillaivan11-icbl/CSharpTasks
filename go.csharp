@@ -1,0 +1,209 @@
+ using System;
+using System.Collections.Generic;
+
+namespace PokemonConsoleGame
+{
+    public class Move
+    {
+        public string Name { get; set; }
+        public int BaseDamage { get; set; }
+        public int Accuracy { get; set; } // 0 to 100
+
+        public Move(string name, int baseDamage, int accuracy)
+        {
+            Name = name;
+            BaseDamage = baseDamage;
+            Accuracy = accuracy;
+        }
+    }
+
+    public class Pokemon
+    {
+        public string Name { get; set; }
+        public int MaxHP { get; set; }
+        public int CurrentHP { get; set; } 
+        public int Attack { get; set; }
+        public int Defense { get; set; }
+        public int Speed { get; set; }
+        public List<Move> Moves { get; set; }
+
+        public Pokemon(string name, int maxHP, int attack, int defense, int speed)
+        {
+            Name = name;
+            MaxHP = maxHP;
+            CurrentHP = maxHP;
+            Attack = attack;
+            Defense = defense;
+            Speed = speed;
+            Moves = new List<Move>();
+        }
+
+        public void TakeDamage(int damage)
+        {
+            CurrentHP -= damage;
+            if (CurrentHP < 0) CurrentHP = 0;
+        }
+
+        public bool IsFainted()
+        {
+            return CurrentHP <= 0;
+        }
+    }
+
+    public class Battle
+    {
+        private Pokemon player;
+        private Pokemon opponent;
+        private Random random = new Random();
+
+        public Battle(Pokemon player, Pokemon opponent)
+        {
+            this.player = player;
+            this.opponent = opponent;
+        }
+
+        public void Start()
+        {
+            Console.WriteLine($"A wild {opponent.Name} appeared!");
+            Console.WriteLine($"Go! {player.Name}!");
+
+            while (!player.IsFainted() && !opponent.IsFainted())
+            {
+                Console.WriteLine("\n----------------------------------");
+                Console.WriteLine($"{player.Name}: {player.CurrentHP}/{player.MaxHP} HP");
+                Console.WriteLine($"{opponent.Name}: {opponent.CurrentHP}/{opponent.MaxHP} HP");
+                Console.WriteLine("----------------------------------");
+
+                Move playerMove = GetPlayerMove();
+                Move opponentMove = opponent.Moves[random.Next(opponent.Moves.Count)];
+
+                if (player.Speed >= opponent.Speed)
+                {
+                    ExecuteMove(player, opponent, playerMove);
+                    if (!opponent.IsFainted())
+                    {
+                        ExecuteMove(opponent, player, opponentMove);
+                    }
+                }
+                else
+                {
+                    ExecuteMove(opponent, player, opponentMove);
+                    if (!player.IsFainted())
+                    {
+                        ExecuteMove(player, opponent, playerMove);
+                    }
+                }
+            }
+
+            if (player.IsFainted())
+            {
+                Console.WriteLine($"\n{player.Name} fainted! You lost the battle...");
+            }
+            else
+            {
+                Console.WriteLine($"\n{opponent.Name} fainted! You won the battle!");
+            }
+        }
+
+        private Move GetPlayerMove()
+        {
+            while (true)
+            {
+                Console.WriteLine("Choose a move:");
+                for (int i = 0; i < player.Moves.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {player.Moves[i].Name}");
+                }
+
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out int choice) && choice >= 1 && choice <= player.Moves.Count)
+                {
+                    return player.Moves[choice - 1];
+                }
+                Console.WriteLine("Invalid choice. Try again.");
+            }
+        }
+
+        private void ExecuteMove(Pokemon attacker, Pokemon defender, Move move)
+        {
+            Console.WriteLine($"{attacker.Name} used {move.Name}!");
+
+            if (random.Next(1, 101) <= move.Accuracy)
+            {
+                // Simple damage formula: ((BaseDamage * Attack / Defense) / 2) + random variation
+                int damage = (int)((move.BaseDamage * (double)attacker.Attack / defender.Defense) / 2) + random.Next(1, 5);
+                defender.TakeDamage(damage);
+                Console.WriteLine($"It dealt {damage} damage to {defender.Name}!");
+            }
+            else
+            {
+                Console.WriteLine($"{attacker.Name}'s attack missed!");
+            }
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Start Battle
+            Console.WriteLine("Welcome to the Pokémon Battle Simulator!");
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Choose your Pokémon:");
+            Console.WriteLine("1. Pikachu");
+            Console.WriteLine("2. Charmander");
+            Console.WriteLine("3. Bulbasaur");
+            Console.WriteLine("4. Bsagon");
+
+            string choice = Console.ReadLine();
+            Pokemon playerPokemon;
+            switch (choice)
+            {
+                case "1":
+                    playerPokemon = new Pokemon("Pikachu", 100, 55, 40, 90);
+                    playerPokemon.Moves.Add(new Move("Tackle", 40, 100));
+                    playerPokemon.Moves.Add(new Move("Thunderbolt", 90, 100));
+                    playerPokemon.Moves.Add(new Move("Quick Attack", 40, 100));
+                    break;
+                case "2":
+                    playerPokemon = new Pokemon("Charmander", 100, 52, 43, 65);
+                    playerPokemon.Moves.Add(new Move("Scratch", 40, 100));
+                    playerPokemon.Moves.Add(new Move("Ember", 40, 100));
+                    playerPokemon.Moves.Add(new Move("Fire Spin", 35, 85));
+                    break;
+                case "3":
+                    playerPokemon = new Pokemon("Bulbasaur", 100, 49, 49, 45);
+                    playerPokemon.Moves.Add(new Move("Tackle", 40, 100));
+                    playerPokemon.Moves.Add(new Move("Vine Whip", 45, 100));
+                    playerPokemon.Moves.Add(new Move("Razor Leaf", 55, 95));
+                    break;
+                case "4":
+                    playerPokemon = new Pokemon("Squirtle", 100, 48, 65, 43);
+                    playerPokemon.Moves.Add(new Move("Tackle", 40, 100));
+                    playerPokemon.Moves.Add(new Move("Water Gun", 40, 100));
+                    playerPokemon.Moves.Add(new Move("Bubble", 40, 100));
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Defaulting to Pikachu.");
+                    playerPokemon = new Pokemon("Pikachu", 100, 55, 40, 90);
+                    playerPokemon.Moves.Add(new Move("Tackle", 40, 100));
+                    playerPokemon.Moves.Add(new Move("Thunderbolt", 90, 100));
+                    playerPokemon.Moves.Add(new Move("Quick Attack", 40, 100));
+                    break;
+            }
+
+            // Initialize Opponent Pokemon
+            Pokemon opponentPokemon = new Pokemon("Mewtwo", 150, 110, 90, 130);
+            opponentPokemon.Moves.Add(new Move("Confusion", 50, 100));
+            opponentPokemon.Moves.Add(new Move("Psychic", 90, 100));
+            opponentPokemon.Moves.Add(new Move("Swift", 60, 100));
+
+            // Start Battle
+            Battle battle = new Battle(playerPokemon, opponentPokemon);
+            battle.Start();
+
+            Console.WriteLine("\nPress any key to exit...");
+            Console.ReadKey();
+        }
+    }
+}
